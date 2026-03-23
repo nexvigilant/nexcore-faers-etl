@@ -1,0 +1,51 @@
+
+[package]
+name = "nexcore-faers-etl"
+version = "1.0.0"
+edition = "2024"
+authors = ["NexVigilant Team <team@nexvigilant.com>"]
+license = "LicenseRef-Proprietary"
+rust-version = "1.85"
+description = "Stream FAERS quarterly ASCII files and generate drug-event contingency tables for signal detection"
+
+[[bin]]
+name = "nexcore-faers-etl"
+path = "src/main.rs"
+
+[lib]
+name = "nexcore_faers_etl"
+path = "src/lib.rs"
+
+[dependencies]
+# Workspace crates (signals consolidated into vigilance::pv::signals)
+nexcore-edit-distance = { version = "1.0.0", path = "../nexcore-edit-distance", registry = "nexcore" }
+nexcore-lex-primitiva = { version = "0.1.0", path = "../nexcore-lex-primitiva", registry = "nexcore" }
+nexcore-vigilance = { version = "1.0.0", path = "../nexcore-vigilance", registry = "nexcore" }
+
+stem-math = { version = "0.1.0", path = "../stem-math", registry = "nexcore" }
+
+# Workspace dependencies
+tokio = { version = "1.38.0", features = ["full"] }
+nexcore-error = { workspace = true }
+tracing = { version = "0.1.40" }
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+clap = { version = "4.5.11", features = ["derive", "cargo", "env"] }
+serde = { version = "1.0.204", features = ["derive"] }
+serde_json = { version = "1.0.120" }
+nexcore-dataframe = { path = "../nexcore-dataframe" }
+rayon = { version = "1.10.0" }
+nexcore-chrono = { workspace = true }
+
+# HTTP client for OpenFDA API
+reqwest = { version = "0.12", features = ["json"] }
+
+# DuckDB for local FAERS storage
+duckdb = { version = "1.1", features = ["bundled"] }
+
+[dev-dependencies]
+proptest = { version = "1.6.0" }
+tempfile = { version = "3.10.1" }
+
+
+[lints]
+workspace = true
