@@ -1,37 +1,40 @@
 # nexcore-faers-etl
 
-The FDA Data Bridge and ETL pipeline for the NexVigilant platform. This crate provides the heavy-lifting required to ingest large-scale quarterly FAERS (FDA Adverse Event Reporting System) ASCII files, transform them into high-resolution DataFrames, and execute batch signal detection.
+Part of the [NexVigilant](https://nexvigilant.com) pharmacovigilance platform.
 
-## Intent
-To automate the ingestion and analysis of bulk regulatory data. It bridges the gap between raw, messy ASCII files and structured, queryable intelligence, enabling high-performance signal detection across millions of reports using Polars and Rayon.
+## About NexVigilant
 
-## T1 Grounding (Lex Primitiva)
-Dominant Primitives:
-- **μ (Mapping)**: The primary primitive for mapping raw ASCII rows to structured `Icsr` and `DrugEventPair` types.
-- **σ (Sequence)**: Manages the ETL pipeline sequence: Ingest → Normalize → Transform → Filter → Detect.
-- **Σ (Sum)**: Aggregates millions of individual reports into stratified contingency tables.
-- **N (Quantity)**: Computes population-scale counts and numeric signal metrics (PRR, ROR, etc.).
-- **π (Persistence)**: Manages the long-term storage of transformed data in Parquet format.
+NexVigilant makes pharmacovigilance accessible. We build open computation tools for drug safety signal detection, causality assessment, and regulatory intelligence — because patient safety knowledge should be available to everyone willing to learn.
 
-## Core Modules
-- **Ingest**: Fast parser for quarterly ASCII files with linked report support.
-- **Transform**: Polars-based logic for normalization, stratification, and aggregation.
-- **Signals**: Batch implementation of detection algorithms (PRR, ROR, IC, EBGM).
-- **Deduplication**: Heuristics for clustering and removing duplicate reports.
-- **NDC Bridge**: National Drug Code directory mapping for standardized drug identification.
+**Live tools:** [mcp.nexvigilant.com](https://mcp.nexvigilant.com) — 193 MCP tools for AI-powered pharmacovigilance, free to connect.
 
-## SOPs for Use
-### Running the Full Pipeline
-```rust
-use nexcore_faers_etl::run_full_pipeline;
-use std::path::Path;
+## Installation
 
-let output = run_full_pipeline(Path::new("./data/faers"), false, 3)?;
-println!("Evaluated {} drug-event pairs.", output.total_pairs);
+```toml
+[dependencies]
+nexcore-faers-etl = { git = "https://github.com/nexvigilant/nexcore-faers-etl" }
 ```
 
-### STRATIFIED Aggregation
-Use `transform_count_drug_events_stratified` to aggregate data by specific cohorts (e.g., Age, Gender, Country).
+> **Note:** This crate was developed as part of the [nexcore](https://github.com/nexvigilant) workspace. Some dependencies may reference workspace-level configuration. See individual `Cargo.toml` for details.
 
 ## License
-Proprietary. Copyright (c) 2026 NexVigilant LLC. All Rights Reserved.
+
+**Personal, non-commercial use only.** See [LICENSE](LICENSE) for full terms.
+
+Organizations of any kind must have explicit written permission for use.
+Contact [matthew@nexvigilant.com](mailto:matthew@nexvigilant.com) for licensing.
+
+## Contributing
+
+Contributions are welcome under the following terms:
+
+1. **Fork & PR.** Fork this repository, make your changes, and submit a pull request.
+2. **CLA.** By submitting a pull request, you agree that your contributions become the property of NexVigilant LLC under the same license terms.
+3. **Code quality.** All Rust code must pass `cargo clippy -- -D warnings` and `cargo fmt --check`.
+4. **Tests.** New functionality should include tests. Run `cargo test --lib` before submitting.
+
+For questions or discussion, open an issue or reach out at [matthew@nexvigilant.com](mailto:matthew@nexvigilant.com).
+
+---
+
+Built by [NexVigilant LLC](https://nexvigilant.com) — Pharmacovigilance for NexVigilants.
